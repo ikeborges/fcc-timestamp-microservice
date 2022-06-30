@@ -14,10 +14,11 @@ app.get("/api/:date", (req, res) => {
   const { date } = req.params
 
   let parsedDate
-  if (date.includes("-")) parsedDate = Date.parse(date)
-  else parsedDate = parseInt(date)
+  if (date.match(/^[0-9]+$/)) parsedDate = parseInt(date)
+  else parsedDate = Date.parse(date)
+  console.log(date, parsedDate)
 
-  if (new Date(parsedDate) == "Invalid Date")
+  if (new Date(parsedDate).toUTCString() === "Invalid Date")
     return res.json({ error: "Invalid Date" })
 
   res.json({ unix: parsedDate, utc: new Date(parsedDate).toUTCString() })
